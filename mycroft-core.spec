@@ -4,29 +4,62 @@
 #
 Name     : mycroft-core
 Version  : v18.8.4
-Release  : 6
+Release  : 7
 URL      : https://github.com/MycroftAI/mycroft-core/archive/release/v18.8.4.tar.gz
 Source0  : https://github.com/MycroftAI/mycroft-core/archive/release/v18.8.4.tar.gz
-Summary  : No detailed summary available
+Summary  : The Mycroft Artificial Intelligence platform.
 Group    : Development/Tools
 License  : Apache-2.0
 Requires: mycroft-core-bin = %{version}-%{release}
 Requires: mycroft-core-license = %{version}-%{release}
 Requires: mycroft-core-python = %{version}-%{release}
 Requires: mycroft-core-python3 = %{version}-%{release}
+Requires: Pillow
 Requires: PyYAML
+Requires: adapt-parser
+Requires: fann2
 Requires: fasteners
 Requires: gTTS-token
 Requires: google-api-python-client
+Requires: inflection
+Requires: msm
+Requires: padaos
+Requires: padatious
 Requires: pep8
 Requires: psutil
+Requires: pulsectl
+Requires: pyalsaaudio
+Requires: pyee
 Requires: pyserial
 Requires: python-dateutil
+Requires: python-vlc
 Requires: requests
 Requires: six
 Requires: tornado
 Requires: websocket_client
+BuildRequires : Pillow
+BuildRequires : PyYAML
+BuildRequires : adapt-parser
 BuildRequires : buildreq-distutils3
+BuildRequires : fann2
+BuildRequires : fasteners
+BuildRequires : gTTS-token
+BuildRequires : google-api-python-client
+BuildRequires : inflection
+BuildRequires : msm
+BuildRequires : padaos
+BuildRequires : padatious
+BuildRequires : pep8
+BuildRequires : psutil
+BuildRequires : pulsectl
+BuildRequires : pyalsaaudio
+BuildRequires : pyee
+BuildRequires : pyserial
+BuildRequires : python-dateutil
+BuildRequires : python-vlc
+BuildRequires : requests
+BuildRequires : six
+BuildRequires : tornado
 
 %description
 /* ====================================================================
@@ -101,19 +134,28 @@ python3 components for the mycroft-core package.
 
 %prep
 %setup -q -n mycroft-core-release-v18.8.4
+cd %{_builddir}/mycroft-core-release-v18.8.4
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1541256937
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1583185174
+# -Werror is for werrorists
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
 python3 setup.py build
 
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/mycroft-core
-cp LICENSE.md %{buildroot}/usr/share/package-licenses/mycroft-core/LICENSE.md
+cp %{_builddir}/mycroft-core-release-v18.8.4/LICENSE.md %{buildroot}/usr/share/package-licenses/mycroft-core/24e20184f70480ef734891b323f491b573c574c5
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -135,7 +177,7 @@ echo ----[ mark ]----
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/mycroft-core/LICENSE.md
+/usr/share/package-licenses/mycroft-core/24e20184f70480ef734891b323f491b573c574c5
 
 %files python
 %defattr(-,root,root,-)
