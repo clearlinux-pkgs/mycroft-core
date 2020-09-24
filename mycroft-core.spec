@@ -4,7 +4,7 @@
 #
 Name     : mycroft-core
 Version  : v18.8.4
-Release  : 7
+Release  : 8
 URL      : https://github.com/MycroftAI/mycroft-core/archive/release/v18.8.4.tar.gz
 Source0  : https://github.com/MycroftAI/mycroft-core/archive/release/v18.8.4.tar.gz
 Summary  : The Mycroft Artificial Intelligence platform.
